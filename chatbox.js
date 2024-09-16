@@ -2,9 +2,11 @@
 
 const styles = `
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 body {
 
-    font-family: Arial, sans-serif;
+      font-family: "Inter", sans-serif;
 
     margin: 0;
 
@@ -16,35 +18,31 @@ body {
 
 .chat-icon {
 
-    position: fixed;
-
+       position: fixed;
     bottom: 20px;
-
     right: 20px;
-
     background-color: #007aff;
-
     color: white;
-
     border-radius: 50%;
-
-    padding: 15px;
-
+    padding: 10px;
     cursor: pointer;
-
     font-size: 24px;
-
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
     transition: background-color 0.3s;
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
      
 
 }
 
 .chat-icon  img{transform:rotateY(0deg);
-
+    width:25px;
      transition:.5s;}
+.chat-icon  img.chat-icon-n{width:30px;}
 
 
 
@@ -52,10 +50,14 @@ body {
 
 .chat-icon-h{display:none;}
 
-// .chat-icon-togggle .chat-icon-n{ display:none;}
+.chat-icon-togggle .chat-icon-n{ display:none;}
 
-// .chat-icon-togggle .chat-icon-h{display:inline-flex;}
-
+.chat-icon-togggle .chat-icon-h{display:inline-flex;}
+// .chat-icon-togggle{animation: mv1 1s linear;}
+@keyframes mv1{
+    0%{transform:rotate(0deg);}
+     0%{transform:rotate(360deg);}
+}
 .chat-icon:hover {
 
     background-color: var(--secondary); 
@@ -110,9 +112,11 @@ body {
 
 .chat-header h3 {
 
-    margin: 0;
-
-    color:#fff;
+       margin: 0;
+    color: #fff;
+    font-size: 20px;
+    line-height: 23px;
+    font-weight: 400;
 
 }
 
@@ -141,6 +145,7 @@ body {
     font-weight: bold;
 
     line-height: 20px;
+    display:none;
 
 }
 
@@ -236,38 +241,28 @@ body {
 }
 
 .chat-input button {
-
     padding: 10px 20px;
-
-    border-radius:0 25px  25px 0 ;
-
-    font-size:15px;
-
-    line-height:20px;
-
-    background-color: var(--secondary);
-
+    border-radius: 0 25px 25px 0;
+    font-size: 15px;
+    line-height: 20px;
+    background-color: var(--primary);
     color: white;
-
-    border: none; 
-
+    border: none;
     cursor: pointer;
-
     transition: background-color 0.3s;
-
     height: auto;
-
+    font-weight: 600;
 }
 
 .chat-input button:hover {
 
-    background-color: #87CEEB;
+    background-color: var(--secondary);
 
 }
 
 @media (max-width:550px){
     .chat-box{
-            right: 5px;
+            right: 10px;
      width: 300px;
     }
     .message >div{
@@ -310,9 +305,9 @@ const chatBoxHTML = `
 
 <div class="chat-icon" id="chatIcon">
 
-    <img class="chat-icon-n" src="https://wordsystech.com/webdesign/wp-content/themes/wordsys/assets/images/chatico.svg"/>
+    <img class="chat-icon-n" id="chatIcon-n" src="https://wordsystech.com/webdesign/wp-content/themes/wordsys/assets/images/chatico.svg"/>
 
-   <!-- <img class="chat-icon-h" src="https://wordsystech.com/webdesign/wp-content/themes/wordsys/assets/images/chatcross.svg"/>-->
+    <img class="chat-icon-h" id="chatIcon-h" src="https://wordsystech.com/webdesign/wp-content/themes/wordsys/assets/images/chatcross.svg"/>
 
 </div>
 
@@ -320,7 +315,7 @@ const chatBoxHTML = `
 
     <div class="chat-header">
 
-        <h3>Chat with us</h3>
+        <h3>Wordsys Chat</h3>
 
         <span class="close-chat" id="closeChat">x</span>
 
@@ -366,21 +361,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add event listeners for chat functionality
 
-    document.getElementById('chatIcon').addEventListener('click', function() {
-
+    document.getElementById('chatIcon-n').addEventListener('click', function() {
         document.getElementById('chatBox').style.display = 'block';
-
-
-
+        document.getElementById('chatIcon').classList.add('chat-icon-togggle');
     });
-
-
-
-    document.getElementById('closeChat').addEventListener('click', function() {
-
+    document.getElementById('chatIcon-h').addEventListener('click', function() {
         document.getElementById('chatBox').style.display = 'none';
-
+        document.getElementById('chatIcon').classList.remove('chat-icon-togggle');
     });
+
+
+
+    // document.getElementById('closeChat').addEventListener('click', function() {
+
+    //     document.getElementById('chatBox').style.display = 'none';
+
+    // });
 
 
 
