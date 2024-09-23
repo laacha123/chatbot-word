@@ -309,17 +309,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let botName = '';
 
-    document.getElementById('chatIcon-n').addEventListener('click', function () {
-        document.getElementById('chatBox').style.display = 'block';
-        document.getElementById('chatIcon').classList.add('chat-icon-togggle');
-
-        // If no bot name is stored, trigger bot initiation
+    // Function to initiate chat once per session
+    function initiateChat() {
         if (!sessionStorage.getItem('botName')) {
             socket.emit('user_message', { message: 'initiate_chat' });
         } else {
             botName = sessionStorage.getItem('botName');
             const welcomeMessage = `Hey there! Awesome to see you at Wordsys Technology! I’m ${botName}. What can I help you with today to make your site shine?`;
             displayMessage(botName, welcomeMessage);
+        }
+    }
+
+    document.getElementById('chatIcon-n').addEventListener('click', function () {
+        if (document.getElementById('chatBox').style.display === 'none') {
+            document.getElementById('chatBox').style.display = 'block';
+            document.getElementById('chatIcon').classList.add('chat-icon-togggle');
+            initiateChat();  // Trigger the chat initiation only once
         }
     });
 
