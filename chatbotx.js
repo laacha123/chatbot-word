@@ -307,24 +307,15 @@ document.addEventListener('DOMContentLoaded', function() {
     chatBoxContainer.innerHTML = chatBoxHTML;
     document.body.appendChild(chatBoxContainer);
 
-    let botName = '';
-
-    // Function to initiate chat once per session
-    function initiateChat() {
-        if (!sessionStorage.getItem('botName')) {
-            socket.emit('user_message', { message: 'initiate_chat' });
-        } else {
-            botName = sessionStorage.getItem('botName');
-            const welcomeMessage = `Hey there! Awesome to see you at Wordsys Technology! I’m ${botName}. What can I help you with today to make your site shine?`;
-            displayMessage(botName, welcomeMessage);
-        }
-    }
+    let botName = sessionStorage.getItem('botName') || '';  // Persist bot name across sessions
 
     document.getElementById('chatIcon-n').addEventListener('click', function () {
-        if (document.getElementById('chatBox').style.display === 'none') {
-            document.getElementById('chatBox').style.display = 'block';
-            document.getElementById('chatIcon').classList.add('chat-icon-togggle');
-            initiateChat();  // Trigger the chat initiation only once
+        document.getElementById('chatBox').style.display = 'block';
+        document.getElementById('chatIcon').classList.add('chat-icon-togggle');
+
+        // If no bot name is stored, trigger bot initiation only once
+        if (!botName) {
+            socket.emit('user_message', { message: 'initiate_chat' });
         }
     });
 
