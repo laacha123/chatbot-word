@@ -156,7 +156,7 @@ body {
     border-radius: 0 25px 25px 0;
     font-size: 15px;
     line-height: 20px;
-    background-color: var(--primary);
+    background-color: #0063cf;
     color: white;
     border: none;
     cursor: pointer;
@@ -221,13 +221,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('chatBox').style.display = 'block';
         document.getElementById('chatIcon').classList.add('chat-icon-togggle');
 
-        // Show disclaimer message when the chat opens
-        displayMessage('Bot', 'This conversation will be recorded. We won\'t ask for confidential details, and please refrain from sharing any information that you wouldn\'t want to be recorded.');
-
-        // Trigger bot's welcome message after a short delay
-        setTimeout(() => {
-            socket.emit('user_message', { message: 'initiate_chat' });  // Send a special message to trigger bot's introduction
-        }, 1000);
+        // Trigger bot's welcome message as soon as chat is opened
+        socket.emit('user_message', { message: 'initiate_chat' });
     });
 
     document.getElementById('chatIcon-h').addEventListener('click', function () {
@@ -243,6 +238,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let chatHistory = '';
     let botName = '';
 
+    // Receive bot's first message when the chat starts
+    socket.on('bot_message', function (data) {
+        const message = data.message;
+        botName = data.bot_name;  // Store the bot's name
+        displayMessage(botName, message);  // Use bot's name instead of "Bot"
+        chatHistory += `${botName}: ${message}\n`;
+    });
+
     document.getElementById('sendBtn').addEventListener('click', function () {
         sendMessage();
     });
@@ -251,13 +254,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'Enter') {
             sendMessage();
         }
-    });
-
-    socket.on('bot_message', function (data) {
-        const message = data.message;
-        botName = data.bot_name;  // Store the bot's name
-        displayMessage(botName, message);  // Use bot's name instead of "Bot"
-        chatHistory += `${botName}: ${message}\n`;
     });
 
     function sendMessage() {
