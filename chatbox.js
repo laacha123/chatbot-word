@@ -222,7 +222,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('chatIcon').classList.add('chat-icon-togggle');
 
         // Trigger bot's welcome message as soon as chat is opened
-        socket.emit('user_message', { message: 'initiate_chat' });
+        if (!sessionStorage.getItem('botName')) {
+            socket.emit('user_message', { message: 'initiate_chat' });
+        } else {
+            // If the bot name already exists in the session, use it and show the welcome message
+            const savedBotName = sessionStorage.getItem('botName');
+            displayMessage(savedBotName, `Hey there! Awesome to see you at Wordsys Technology! I’m ${savedBotName}. What can I help you with today to make your site shine?`);
+        }
     });
 
     document.getElementById('chatIcon-h').addEventListener('click', function () {
@@ -242,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
     socket.on('bot_message', function (data) {
         const message = data.message;
         botName = data.bot_name;  // Store the bot's name
+        sessionStorage.setItem('botName', botName);  // Save the bot name for this session
         displayMessage(botName, message);  // Use bot's name instead of "Bot"
         chatHistory += `${botName}: ${message}\n`;
     });
